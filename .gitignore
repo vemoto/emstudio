@@ -18,6 +18,7 @@ Makefile
 Makefile.Debug
 Makefile.Release
 tags
+.qmake.stash
 
 # Temp files
 *~

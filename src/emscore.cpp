@@ -27,20 +27,20 @@ EMSCore::EMSCore(int &argc, char *argv[]) : QApplication(argc,argv)
 	logger.setLoggingLevel(QsLogging::TraceLevel);
 
 #ifdef Q_OS_WIN
-	QString AppData(env.value("AppData").replace("\\","/"));
+	QString appData(env.value("AppData").replace("\\","/"));
 	QString UserProfile(env.value("UserProfile").replace("\\","/"));
-	if (AppData.isEmpty())
+	if (appData.isEmpty())
 	{
-		AppData = UserProfile;
+		appData = UserProfile;
 	}
 
-	if (!QDir(AppData).exists("EMStudio"))
+	if (!QDir(appData).exists("EMStudio"))
 	{
-		QDir(AppData).mkpath("EMStudio");
+		QDir(appData).mkpath("EMStudio");
 	}
 	m_defaultsDir = QApplication::instance()->applicationDirPath();
 
-	m_settingsDir = AppData + "/" + "EMStudio";
+	m_settingsDir = appData + "/" + "EMStudio";
 	m_localHomeDir = UserProfile + "/EMStudio";
 #else
 	//*nix is so much simpler.
@@ -56,7 +56,7 @@ EMSCore::EMSCore(int &argc, char *argv[]) : QApplication(argc,argv)
 	//m_settingsFile = appDataDir + "/" + ".EMStudio/EMStudio-config.ini";
 #endif
 
-	QDir appDir(AppData);
+	QDir appDir(appDataDir);
 	if (appDir.exists())
 	{
 		if (!appDir.cd("EMStudio"))
@@ -83,7 +83,7 @@ EMSCore::EMSCore(int &argc, char *argv[]) : QApplication(argc,argv)
 	}
 	//Settings file should ALWAYS be the one in the settings dir. No reason to have it anywhere else.
 	m_settingsFile = m_settingsDir + "/EMStudio-config.ini";
-	const QString sLogPath(QDir(AppData + "/EMStudio/applogs").filePath("log.txt"));
+	const QString sLogPath(QDir(appDataDir + "/EMStudio/applogs").filePath("log.txt"));
 
 	QsLogging::DestinationPtr fileDestination(QsLogging::DestinationFactory::MakeFileDestination(sLogPath, true, 0, 100));
 	QsLogging::DestinationPtr debugDestination(QsLogging::DestinationFactory::MakeDebugOutputDestination());
